@@ -1,11 +1,12 @@
 from flask import Flask, request, jsonify
 from app_service import validar_campos, calcular_valor, criar_objeto_movimentacao
 from pymongo import MongoClient
+import os
 
 app = Flask(__name__)
 
 # "Banco de dados" em memória
-client = MongoClient("mongodb://mongo:27017/") 
+client = MongoClient(os.getenv("MONGO_URL")) 
 db = client["movimentacoes"]
 movimentacoes_collection = db["movimentacoes"]  
 

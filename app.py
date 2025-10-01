@@ -10,7 +10,6 @@ client = MongoClient(os.getenv("MONGO_URL"))
 db = client["movimentacoes"]
 movimentacoes_collection = db["movimentacoes"]  
 
-
 ## docker run -p 27017:27017 -d --network=rede --name mongo mongo
 
 # ------------------------

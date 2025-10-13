@@ -2,6 +2,16 @@ from flask import Flask, request, jsonify
 from app_service import validar_campos, calcular_valor, criar_objeto_movimentacao
 from pymongo import MongoClient
 import os
+from authlib.integrations.flask_oauth2 import ResourceProtector
+from validator import Auth0JWTBearerTokenValidator
+
+
+require_auth = ResourceProtector()
+validator = Auth0JWTBearerTokenValidator(
+"dev-1m7en8ylkhnx1x7r.us.auth0.com",
+"https://dev-1m7en8ylkhnx1x7r.us.auth0.com/api/v2/"
+    )
+require_auth.register_token_validator(validator)
 
 app = Flask(__name__)
 
@@ -17,6 +27,7 @@ movimentacoes_collection = db["movimentacoes"]
 # ------------------------
 
 @app.route("/movimentacoes", methods=["POST"])
+@require_auth(None)
 def criar_movimentacao():
     data = request.get_json()
 
@@ -37,6 +48,7 @@ def criar_movimentacao():
 
 
 @app.route("/movimentacoes", methods=["GET"])
+@require_auth(None)
 def listar_movimentacoes():
     docs = list(movimentacoes_collection.find())
     for d in docs:
